@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rust Systems Engineering Roadmap</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #0b0f19;
+        }
+        .code-font {
+            font-family: 'JetBrains Mono', monospace;
+        }
+    </style>
+</head>
+<body class="text-slate-200 min-h-screen antialiased bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-slate-900 via-slate-950 to-black">
+
+    <div class="max-w-5xl mx-auto px-4 py-12">
+        <!-- Header -->
+        <header class="border-b border-slate-800 pb-8 mb-12 relative">
+            <div class="absolute -top-10 left-1/2 -translate-x-1/2 w-72 h-72 bg-orange-500/10 rounded-full blur-3xl pointer-events-none"></div>
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                <div>
+                    <div class="flex items-center gap-2 mb-2">
+                        <span class="px-2.5 py-1 text-xs font-semibold code-font bg-orange-500/10 text-orange-400 rounded-md border border-orange-500/20 uppercase tracking-wider">Target Track</span>
+                        <span class="text-slate-500 text-sm">• Dev & Infrastructure</span>
+                    </div>
+                    <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight text-white">Rust Systems Engineering Roadmap</h1>
+                    <p class="text-slate-400 mt-2 text-lg">Master asynchronous systems & network architecture without a garbage collector.</p>
+                </div>
+                <div class="bg-slate-900/60 border border-slate-800 p-4 rounded-xl backdrop-blur-sm min-w-[180px]">
+                    <div class="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Overall Progress</div>
+                    <div class="flex items-baseline gap-2">
+                        <span id="progress-percent" class="text-3xl font-bold text-orange-400 code-font">0%</span>
+                        <span id="progress-fraction" class="text-xs text-slate-500 font-medium">(0/10 tasks)</span>
+                    </div>
+                    <div class="w-full bg-slate-800 h-2 rounded-full mt-2 overflow-hidden">
+                        <div id="progress-bar" class="bg-gradient-to-r from-orange-500 to-amber-400 h-full transition-all duration-500 ease-out" style="width: 0%"></div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Core Concept Cards (Go vs Rust Visual Shift) -->
+        <section class="grid md:grid-cols-2 gap-6 mb-12">
+            <!-- Go Paradigm -->
+            <div class="bg-slate-900/40 border border-slate-800/80 rounded-xl p-6 relative overflow-hidden group hover:border-slate-800 transition-colors">
+                <div class="absolute top-0 left-0 w-1 h-full bg-cyan-500"></div>
+                <h3 class="text-lg font-bold text-white mb-3 flex items-center gap-2">
+                    <span class="p-1.5 rounded-md bg-cyan-500/10 text-cyan-400 text-xs code-font">Go</span> 
+                    Automated & Runtime Managed
+                </h3>
+                <p class="text-slate-400 text-sm leading-relaxed mb-4">
+                    Relies on lightweight concurrent green threads (Goroutines) and an implicit background Garbage Collector (GC) to sweep heap memory periodically. This simplifies rapid service architecture but risks tail-latency spikes under massive distributed scale.
+                </p>
+                <div class="bg-slate-950/80 p-3 rounded-lg border border-slate-800/50 text-xs code-font text-cyan-300">
+                    go func() { process(data) }() <span class="text-slate-600">// Runtime-scheduled</span>
+                </div>
+            </div>
+
+            <!-- Rust Paradigm -->
+            <div class="bg-slate-900/40 border border-slate-800/80 rounded-xl p-6 relative overflow-hidden group hover:border-slate-800 transition-colors">
+                <div class="absolute top-0 left-0 w-1 h-full bg-orange-500"></div>
+                <h3 class="text-lg font-bold text-white mb-3 flex items-center gap-2">
+                    <span class="p-1.5 rounded-md bg-orange-500/10 text-orange-400 text-xs code-font">Rust</span> 
+                    Compile-Time Determinism
+                </h3>
+                <p class="text-slate-400 text-sm leading-relaxed mb-4">
+                    Eliminates the GC completely. Thread safety boundaries and reference rules are mathematically verified during compilation via strict static types like <code class="text-orange-300 code-font">Arc</code> for shared ownership and <code class="text-orange-300 code-font">Mutex</code> for data mutation.
+                </p>
+                <div class="bg-slate-950/80 p-3 rounded-lg border border-slate-800/50 text-xs code-font text-orange-300">
+                    tokio::spawn(async move { ... }); <span class="text-slate-600">// Compile-verified</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Sprints Container -->
+        <main class="space-y-8">
+            
+            <!-- Sprint 1 -->
+            <section class="bg-slate-900/30 border border-slate-800 rounded-2xl p-6 md:p-8 backdrop-blur-sm">
+                <div class="flex flex-col md:flex-row md:items-start justify-between border-b border-slate-800 pb-4 mb-6 gap-4">
+                    <div>
+                        <div class="text-xs font-bold uppercase tracking-widest text-orange-500 mb-1">Phase 01</div>
+                        <h2 class="text-xl font-bold text-white">Syntax &amp; Borrow Checker Conditioning</h2>
+                        <p class="text-slate-400 text-sm mt-1">Acclimate to explicit reference constraints, heap/stack mechanics, and compiler diagnostics.</p>
+                    </div>
+                    <span class="px-3 py-1 text-xs font-medium rounded-full bg-slate-800 text-slate-300 self-start code-font border border-slate-700">3 - 5 Days</span>
+                </div>
+                
+                <div class="space-y-4">
+                    <!-- Task 1 -->
+                    <label class="flex items-start gap-4 p-4 rounded-xl bg-slate-900/50 border border-slate-800/60 hover:border-slate-700/80 transition-all cursor-pointer select-none">
+                        <input type="checkbox" id="task-1" class="task-checkbox mt-1 h-5 w-5 rounded border-slate-700 bg-slate-800 text-orange-500 focus:ring-orange-500/20 focus:ring-offset-slate-900 rounded-md transition" />
+                        <div class="flex-1">
+                            <span class="block text-sm font-semibold text-white tracking-wide">Environment Setup</span>
+                            <span class="block text-xs text-slate-400 mt-1">Configure toolchain using <code class="code-font text-orange-300 text-[11px] bg-slate-950 px-1 py-0.5 rounded">rustup</code>, instantiate a workspace with cargo, and link up VS Code with <code class="code-font text-slate-300 text-[11px]">rust-analyzer</code>.</span>
+                        </div>
+                    </label>
+
+                    <!-- Task 2 -->
+                    <label class="flex items-start gap-4 p-4 rounded-xl bg-slate-900/50 border border-slate-800/60 hover:border-slate-700/80 transition-all cursor-pointer select-none">
+                        <input type="checkbox" id="task-2" class="task-checkbox mt-1 h-5 w-5 rounded border-slate-700 bg-slate-800 text-orange-500 focus:ring-orange-500/20 focus:ring-offset-slate-900 rounded-md transition" />
+                        <div class="flex-1">
+                            <span class="block text-sm font-semibold text-white tracking-wide">Rustlings Suite Mastery</span>
+                            <span class="block text-xs text-slate-400 mt-1">Clone the official rust-lang/rustlings repository. Fix compilation bugs sequentially spanning vectors, enums, options, and error formatting until <code class="code-font text-green-400 text-[11px]">rustlings watch</code> passes fully green.</span>
+                        </div>
+                    </label>
+
+                    <!-- Task 3 -->
+                    <label class="flex items-start gap-4 p-4 rounded-xl bg-slate-900/50 border border-slate-800/60 hover:border-slate-700/80 transition-all cursor-pointer select-none">
+                        <input type="checkbox" id="task-3" class="task-checkbox mt-1 h-5 w-5 rounded border-slate-700 bg-slate-800 text-orange-500 focus:ring-orange-500/20 focus:ring-offset-slate-900 rounded-md transition" />
+                        <div class="flex-1">
+                            <span class="block text-sm font-semibold text-white tracking-wide">The Borrowing Mental Model</span>
+                            <span class="block text-xs text-slate-400 mt-1">Intentionally violate compiler rules to master standard memory limits: exactly one mutable reference (<code class="code-font text-orange-300 text-[11px]">&mut T</code>) OR multiple immutable references (<code class="code-font text-orange-300 text-[11px]">&T</code>) active within an execution block.</span>
+                        </div>
+                    </label>
+                </div>
+            </section>
+
+            <!-- Sprint 2 -->
+            <section class="bg-slate-900/30 border border-slate-800 rounded-2xl p-6 md:p-8 backdrop-blur-sm">
+                <div class="flex flex-col md:flex-row md:items-start justify-between border-b border-slate-800 pb-4 mb-6 gap-4">
+                    <div>
+                        <div class="text-xs font-bold uppercase tracking-widest text-amber-500 mb-1">Phase 02</div>
+                        <h2 class="text-xl font-bold text-white">Structural Architecture &amp; Heap Deep-Dive</h2>
+                        <p class="text-slate-400 text-sm mt-1">Transition from Go's hidden garbage collecting loops to explicit, compiler-enforced data lifespans.</p>
+                    </div>
+                    <span class="px-3 py-1 text-xs font-medium rounded-full bg-slate-800 text-slate-300 self-start code-font border border-slate-700">3 - 4 Days</span>
+                </div>
+                
+                <div class="space-y-4">
+                    <!-- Task 4 -->
+                    <label class="flex items-start gap-4 p-4 rounded-xl bg-slate-900/50 border border-slate-800/60 hover:border-slate-700/80 transition-all cursor-pointer select-none">
+                        <input type="checkbox" id="task-4" class="task-checkbox mt-1 h-5 w-5 rounded border-slate-700 bg-slate-800 text-orange-500 focus:ring-orange-500/20 focus:ring-offset-slate-900 rounded-md transition" />
+                        <div class="flex-1">
+                            <span class="block text-sm font-semibold text-white tracking-wide">The Core Literature Deep Dive</span>
+                            <span class="block text-xs text-slate-400 mt-1">Read Chapters 4 (Ownership), 10 (Lifetimes), and 16 (Fearless Concurrency) of the official manual. Map runtime stack allocations directly against heap-allocated smart pointers.</span>
+                        </div>
+                    </label>
+
+                    <!-- Task 5 -->
+                    <label class="flex items-start gap-4 p-4 rounded-xl bg-slate-900/50 border border-slate-800/60 hover:border-slate-700/80 transition-all cursor-pointer select-none">
+                        <input type="checkbox" id="task-5" class="task-checkbox mt-1 h-5 w-5 rounded border-slate-700 bg-slate-800 text-orange-500 focus:ring-orange-500/20 focus:ring-offset-slate-900 rounded-md transition" />
+                        <div class="flex-1">
+                            <span class="block text-sm font-semibold text-white tracking-wide">Deconstruct Lifetime Syntax</span>
+                            <span class="block text-xs text-slate-400 mt-1">Implement functions that take references and return references, applying explicit lifetime annotations (<code class="code-font text-amber-400 text-[11px]">'a</code>) to prove to the borrow checker that references will never point to dropped memory blocks.</span>
+                        </div>
+                    </label>
+
+                    <!-- Task 6 -->
+                    <label class="flex items-start gap-4 p-4 rounded-xl bg-slate-900/50 border border-slate-800/60 hover:border-slate-700/80 transition-all cursor-pointer select-none">
+                        <input type="checkbox" id="task-6" class="task-checkbox mt-1 h-5 w-5 rounded border-slate-700 bg-slate-800 text-orange-500 focus:ring-orange-500/20 focus:ring-offset-slate-900 rounded-md transition" />
+                        <div class="flex-1">
+                            <span class="block text-sm font-semibold text-white tracking-wide">Exercism Mentoring Loop</span>
+                            <span class="block text-xs text-slate-400 mt-1">Complete at least 5 intermediate challenges on Exercism.org. Focus entirely on matching idiomatic iterator methods, avoiding raw loop indexing, and exploring traits.</span>
+                        </div>
+                    </label>
+                </div>
+            </section>
+
+            <!-- Sprint 3 -->
+            <section class="bg-slate-900/30 border border-slate-800 rounded-2xl p-6 md:p-8 backdrop-blur-sm">
+                <div class="flex flex-col md:flex-row md:items-start justify-between border-b border-slate-800 pb-4 mb-6 gap-4">
+                    <div>
+                        <div class="text-xs font-bold uppercase tracking-widest text-emerald-500 mb-1">Phase 03</div>
+                        <h2 class="text-xl font-bold text-white">The Asynchronous Networking Engine MVP</h2>
+                        <p class="text-slate-400 text-sm mt-1">Build a robust distributed Key-Value infrastructure engine, transitioning architecture from single-threaded loops to highly parallel systems.</p>
+                    </div>
+                    <span class="px-3 py-1 text-xs font-medium rounded-full bg-slate-800 text-slate-300 self-start code-font border border-slate-700">1 - 2 Weeks</span>
+                </div>
+                
+                <div class="space-y-4">
+                    <!-- Task 7 -->
+                    <label class="flex items-start gap-4 p-4 rounded-xl bg-slate-900/50 border border-slate-800/60 hover:border-slate-700/80 transition-all cursor-pointer select-none">
+                        <input type="checkbox" id="task-7" class="task-checkbox mt-1 h-5 w-5 rounded border-slate-700 bg-slate-800 text-orange-500 focus:ring-orange-500/20 focus:ring-offset-slate-900 rounded-md transition" />
+                        <div class="flex-1">
+                            <span class="block text-sm font-semibold text-white tracking-wide">Synchronous Network Kernel</span>
+                            <span class="block text-xs text-slate-400 mt-1">Build an MVP using <code class="code-font text-emerald-400 text-[11px]">std::net::TcpListener</code>. Accept primitive custom strings, mutate a local `HashMap`, and reply over a text socket stream.</span>
+                        </div>
+                    </label>
+
+                    <!-- Task 8 -->
+                    <label class="flex items-start gap-4 p-4 rounded-xl bg-slate-900/50 border border-slate-800/60 hover:border-slate-700/80 transition-all cursor-pointer select-none">
+                        <input type="checkbox" id="task-8" class="task-checkbox mt-1 h-5 w-5 rounded border-slate-700 bg-slate-800 text-orange-500 focus:ring-orange-500/20 focus:ring-offset-slate-900 rounded-md transition" />
+                        <div class="flex-1">
+                            <span class="block text-sm font-semibold text-white tracking-wide">Tokio Async Runtime Conversion</span>
+                            <span class="block text-xs text-slate-400 mt-1">Refactor raw block-loops using the multi-threaded <code class="code-font text-emerald-400 text-[11px]">tokio</code> framework. Leverage explicit non-blocking multi-threading abstractions via macros and async runtimes.</span>
+                        </div>
+                    </label>
+
+                    <!-- Task 9 -->
+                    <label class="flex items-start gap-4 p-4 rounded-xl bg-slate-900/50 border border-slate-800/60 hover:border-slate-700/80 transition-all cursor-pointer select-none">
+                        <input type="checkbox" id="task-9" class="task-checkbox mt-1 h-5 w-5 rounded border-slate-700 bg-slate-800 text-orange-500 focus:ring-orange-500/20 focus:ring-offset-slate-900 rounded-md transition" />
+                        <div class="flex-1">
+                            <span class="block text-sm font-semibold text-white tracking-wide">Thread-Safe Cache Layering</span>
+                            <span class="block text-xs text-slate-400 mt-1">Wrap your core state in thread-safe types: <code class="code-font text-emerald-400 text-[11px]">Arc&lt;Mutex&lt;HashMap&lt;String, Vec&lt;u8&gt;&gt;&gt;&gt;</code>. Coordinate non-blocking message passing gracefully across tasks using channels.</span>
+                        </div>
+                    </label>
+
+                    <!-- Task 10 -->
+                    <label class="flex items-start gap-4 p-4 rounded-xl bg-slate-900/50 border border-slate-800/60 hover:border-slate-700/80 transition-all cursor-pointer select-none">
+                        <input type="checkbox" id="task-10" class="task-checkbox mt-1 h-5 w-5 rounded border-slate-700 bg-slate-800 text-orange-500 focus:ring-orange-500/20 focus:ring-offset-slate-900 rounded-md transition" />
+                        <div class="flex-1">
+                            <span class="block text-sm font-semibold text-white tracking-wide">Serialization Protocol Implementation</span>
+                            <span class="block text-xs text-slate-400 mt-1">Integrate the <code class="code-font text-emerald-400 text-[11px]">serde</code> and <code class="code-font text-emerald-400 text-[11px]">bincode</code> crates. Transition commands into zero-copy binary formats to verify speed, stability, and absence of data races under mocked traffic stress tests.</span>
+                        </div>
+                    </label>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="mt-16 text-center text-xs text-slate-600 border-t border-slate-900 pt-8">
+            Rust Systems Engineering Interactive Dashboard • LocalStorage enabled persistence.
+        </footer>
+    </div>
+
+    <!-- Interactive Scripting Engine -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const checkboxes = document.querySelectorAll('.task-checkbox');
+            const totalTasks = checkboxes.length;
+            
+            const progressPercent = document.getElementById('progress-percent');
+            const progressFraction = document.getElementById('progress-fraction');
+            const progressBar = document.getElementById('progress-bar');
+
+            // Initialize App State via LocalStorage
+            function initRoadmap() {
+                checkboxes.forEach(box => {
+                    const savedState = localStorage.getItem(box.id);
+                    if (savedState === 'true') {
+                        box.checked = true;
+                        updateLabelStyle(box, true);
+                    } else {
+                        box.checked = false;
+                        updateLabelStyle(box, false);
+                    }
+
+                    // Add Event Interceptor
+                    box.addEventListener('change', (e) => {
+                        const status = e.target.checked;
+                        localStorage.setItem(box.id, status);
+                        updateLabelStyle(e.target, status);
+                        calculateProgress();
+                    });
+                });
+                calculateProgress();
+            }
+
+            // UI Style Tweaker
+            function updateLabelStyle(input, isChecked) {
+                const label = input.closest('label');
+                if (isChecked) {
+                    label.classList.add('bg-slate-900/90', 'border-orange-500/30', 'shadow-sm', 'shadow-orange-500/5');
+                    label.classList.remove('bg-slate-900/50', 'border-slate-800/60');
+                } else {
+                    label.classList.remove('bg-slate-900/90', 'border-orange-500/30', 'shadow-sm', 'shadow-orange-500/5');
+                    label.classList.add('bg-slate-900/50', 'border-slate-800/60');
+                }
+            }
+
+            // Realtime Metric Compiler
+            function calculateProgress() {
+                const checkedCount = document.querySelectorAll('.task-checkbox:checked').length;
+                const mathematicalPercentage = totalTasks > 0 ? Math.round((checkedCount / totalTasks) * 100) : 0;
+
+                // Sync UI Nodes
+                progressPercent.textContent = `${mathematicalPercentage}%`;
+                progressFraction.textContent = `(${checkedCount}/${totalTasks} tasks)`;
+                progressBar.style.width = `${mathematicalPercentage}%`;
+            }
+
+            // Run application loop
+            initRoadmap();
+        });
+    </script>
+</body>
+</html>
